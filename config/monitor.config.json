@@ -1,0 +1,26 @@
+{
+  "contract": {
+    "address": "0xdc8d6F7aF51120af2D6c5de861dfdC187eFE70a2",
+    "network": "sepolia"
+  },
+  "alerts": {
+    "largeTransactionThreshold": "0.1",
+    "criticalEvents": [
+      "OwnerAdded",
+      "OwnerRemoved",
+      "RequirementChanged"
+    ],
+    "warningEvents": [
+      "SubmitTransaction"
+    ]
+  },
+  "monitoring": {
+    "checkInterval": 300000,
+    "reconnectAttempts": 5,
+    "reconnectDelay": 5000
+  },
+  "metrics": {
+    "enabled": true,
+    "exportInterval": 300000
+  }
+}
