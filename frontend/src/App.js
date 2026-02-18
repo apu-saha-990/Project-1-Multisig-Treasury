@@ -4,7 +4,7 @@ const CONTRACT_ADDRESS = "0xdc8d6F7aF51120af2D6c5de861dfdC187eFE70a2";
 
 const ABI = [
   "function getOwners() view returns (address[])",
-  "function required() view returns (uint)",
+  "function numConfirmationsRequired() view returns (uint)",
   "function getTransactionCount() view returns (uint)",
   "function getTransaction(uint txIndex) view returns (address to, uint value, bytes data, bool executed, uint numConfirmations)",
   "function isConfirmed(uint txIndex, address owner) view returns (bool)",
@@ -63,7 +63,7 @@ async function loadData(c, acc, provider) {
     }
 
     try {
-      const req = await c.required();
+      const req = await c.numConfirmationsRequired();
       setRequired(req.toString());
     } catch (e) {
       console.error("required error:", e.message);
@@ -81,7 +81,8 @@ async function loadData(c, acc, provider) {
       const txs = [];
       for (let i = 0; i < txCount; i++) {
         const tx = await c.getTransaction(i);
-        txs.push({ index: i, to: tx.to, value: ethers.utils.formatEther(tx.value), executed: tx.executed, numConfirmations: tx.numConfirmations.toString(), confirmed: false });
+        const confirmed = await c.isConfirmed(i, acc);
+        txs.push({ index: i, to: tx.to, value: ethers.utils.formatEther(tx.value), executed: tx.executed, numConfirmations: tx.numConfirmations.toString(), confirmed });
       }
       setTransactions(txs.reverse());
     } catch (e) {
@@ -126,6 +127,18 @@ async function submitTx() {
     }
     setLoading(false);
   }
+  async function revokeTx(index) {
+    setLoading(true);
+    try {
+      const tx = await contract.revokeConfirmation(index);
+      await tx.wait();
+      alert("Revoked!");
+      window.location.reload();
+    } catch (e) {
+      alert("Error: " + e.message);
+    }
+    setLoading(false);
+  }
 return (
     <div style={{ fontFamily: "monospace", background: "#0a0a0a", minHeight: "100vh", color: "#00ff88", padding: "20px" }}>
       <h1 style={{ borderBottom: "1px solid #00ff88", paddingBottom: "10px" }}>⚡ MultiSig Treasury</h1>
@@ -162,7 +175,7 @@ return (
                 <p>Status: {tx.executed ? <span style={{ color: "#00ff88" }}>✅ Executed</span> : <span style={{ color: "#ffaa00" }}>⏳ Pending</span>}</p>
                 {!tx.executed && isOwner && (
                   <div style={{ marginTop: "10px" }}>
-                    {!tx.confirmed && <button onClick={() => confirmTx(tx.index)} disabled={loading} style={{ background: "#00aaff", color: "#fff", border: "none", padding: "8px 16px", cursor: "pointer", marginRight: "10px", fontFamily: "monospace" }}>✓ Approve</button>}
+                    {!tx.confirmed && <button onClick={() => confirmTx(tx.index)} disabled={loading} style={{ background: "#00aaff", color: "#fff", border: "none", padding: "8px 16px", cursor: "pointer", marginRight: "10px", fontFamily: "monospace" }}>✓ Approve</button>}{tx.confirmed && <button onClick={() => revokeTx(tx.index)} disabled={loading} style={{ background: "#ff4444", color: "#fff", border: "none", padding: "8px 16px", cursor: "pointer", marginRight: "10px", fontFamily: "monospace" }}>✗ Revoke</button>}
                     {tx.numConfirmations >= required && <button onClick={() => executeTx(tx.index)} disabled={loading} style={{ background: "#00ff88", color: "#0a0a0a", border: "none", padding: "8px 16px", cursor: "pointer", fontFamily: "monospace" }}>⚡ Execute</button>}
                   </div>
                 )}
