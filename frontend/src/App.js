@@ -11,7 +11,10 @@ const ABI = [
   "function submitTransaction(address to, uint value, bytes data)",
   "function confirmTransaction(uint txIndex)",
   "function executeTransaction(uint txIndex)",
-  "function revokeConfirmation(uint txIndex)"
+  "function revokeConfirmation(uint txIndex)",
+  "function addOwner(address owner)",
+  "function removeOwner(address owner)",
+  "function changeRequirement(uint required)"
 ];
 export default function App() {
   const [account, setAccount] = useState(null);
@@ -24,6 +27,9 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [toAddress, setToAddress] = useState("");
   const [amount, setAmount] = useState("");
+  const [newOwner, setNewOwner] = useState("");
+  const [removeOwnerAddr, setRemoveOwnerAddr] = useState("");
+  const [newRequired, setNewRequired] = useState("");
 async function connectWallet() {
     try {
       if (!window.ethereum) {
@@ -139,6 +145,55 @@ async function submitTx() {
     }
     setLoading(false);
   }
+  async function submitAddOwner() {
+    if (!newOwner) return;
+    setLoading(true);
+    try {
+      const iface = new ethers.utils.Interface(ABI);
+      const data = iface.encodeFunctionData("addOwner", [newOwner]);
+      const tx = await contract.submitTransaction(CONTRACT_ADDRESS, 0, data);
+      await tx.wait();
+      alert("Add owner proposal submitted! Needs approval from other owners.");
+      setNewOwner("");
+      window.location.reload();
+    } catch (e) {
+      alert("Error: " + e.message);
+    }
+    setLoading(false);
+  }
+  async function submitRemoveOwner() {
+    if (!removeOwnerAddr) return;
+    setLoading(true);
+    try {
+      const iface = new ethers.utils.Interface(ABI);
+      const data = iface.encodeFunctionData("removeOwner", [removeOwnerAddr]);
+      const tx = await contract.submitTransaction(CONTRACT_ADDRESS, 0, data);
+      await tx.wait();
+      alert("Remove owner proposal submitted! Needs approval from other owners.");
+      setRemoveOwnerAddr("");
+      window.location.reload();
+    } catch (e) {
+      alert("Error: " + e.message);
+    }
+    setLoading(false);
+  }
+
+  async function submitChangeRequired() {
+    if (!newRequired) return;
+    setLoading(true);
+    try {
+      const iface = new ethers.utils.Interface(ABI);
+      const data = iface.encodeFunctionData("changeRequirement", [parseInt(newRequired)]);
+      const tx = await contract.submitTransaction(CONTRACT_ADDRESS, 0, data);
+      await tx.wait();
+      alert("Change requirement proposal submitted! Needs approval from other owners.");
+      setNewRequired("");
+      window.location.reload();
+    } catch (e) {
+      alert("Error: " + e.message);
+    }
+    setLoading(false);
+  }
 return (
     <div style={{ fontFamily: "monospace", background: "#0a0a0a", minHeight: "100vh", color: "#00ff88", padding: "20px" }}>
       <h1 style={{ borderBottom: "1px solid #00ff88", paddingBottom: "10px" }}>⚡ MultiSig Treasury</h1>
@@ -164,6 +219,43 @@ return (
                 {loading ? "Processing..." : "Submit Transaction"}
               </button>
             </div>
+  )}
+
+          {isOwner && (
+            <div style={{ background: "#111", padding: "15px", marginBottom: "20px", border: "1px solid #333" }}>
+    <h3>👥 Owner Management</h3>
+    
+    <div style={{ marginBottom: "15px" }}>
+      <h4 style={{ color: "#00ff88", marginBottom: "10px" }}>Current Owners:</h4>
+      {owners.map((owner, i) => (
+        <p key={i} style={{ fontSize: "12px", color: "#666", marginBottom: "5px" }}>{i+1}. {owner}</p>
+      ))}
+    </div>
+
+    <div style={{ marginBottom: "15px" }}>
+      <h4 style={{ color: "#00aaff" }}>Add New Owner</h4>
+      <input value={newOwner} onChange={e => setNewOwner(e.target.value)} placeholder="New owner address (0x...)" style={{ width: "100%", padding: "8px", marginBottom: "10px", background: "#222", color: "#00ff88", border: "1px solid #444", fontFamily: "monospace" }} />
+      <button onClick={submitAddOwner} disabled={loading} style={{ background: "#00aaff", color: "#fff", border: "none", padding: "10px 20px", cursor: "pointer", fontFamily: "monospace" }}>
+        Add Owner
+      </button>
+    </div>
+
+    <div style={{ marginBottom: "15px" }}>
+      <h4 style={{ color: "#ff4444" }}>Remove Owner</h4>
+      <input value={removeOwnerAddr} onChange={e => setRemoveOwnerAddr(e.target.value)} placeholder="Owner address to remove (0x...)" style={{ width: "100%", padding: "8px", marginBottom: "10px", background: "#222", color: "#00ff88", border: "1px solid #444", fontFamily: "monospace" }} />
+      <button onClick={submitRemoveOwner} disabled={loading} style={{ background: "#ff4444", color: "#fff", border: "none", padding: "10px 20px", cursor: "pointer", fontFamily: "monospace" }}>
+        Remove Owner
+      </button>
+    </div>
+
+    <div>
+      <h4 style={{ color: "#ffaa00" }}>Change Required Signatures</h4>
+      <input value={newRequired} onChange={e => setNewRequired(e.target.value)} placeholder="New required count" type="number" min="1" style={{ width: "100%", padding: "8px", marginBottom: "10px", background: "#222", color: "#00ff88", border: "1px solid #444", fontFamily: "monospace" }} />
+      <button onClick={submitChangeRequired} disabled={loading} style={{ background: "#ffaa00", color: "#0a0a0a", border: "none", padding: "10px 20px", cursor: "pointer", fontFamily: "monospace" }}>
+        Change Requirement
+      </button>
+    </div>
+  </div>          
           )}
 <div style={{ background: "#111", padding: "15px", border: "1px solid #333" }}>
             <h3>📋 Transactions ({transactions.length})</h3>
