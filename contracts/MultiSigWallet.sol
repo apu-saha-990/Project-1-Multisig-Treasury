@@ -24,12 +24,15 @@ contract MultiSigWallet {
     event OwnerAdded(address indexed owner);
     event OwnerRemoved(address indexed owner);
     event RequirementChanged(uint numConfirmationsRequired);
+    event Paused(address indexed owner);
+    event Unpaused(address indexed owner);
     
     // ============ STATE VARIABLES ============
     
     address[] public owners;
     mapping(address => bool) public isOwner;
     uint public numConfirmationsRequired;
+    bool public paused;
     
     struct Transaction {
         address to;
@@ -63,6 +66,10 @@ contract MultiSigWallet {
     modifier notConfirmed(uint _txIndex) {
         require(!isConfirmed[_txIndex][msg.sender], "Transaction already confirmed");
         _;
+    }
+    modifier whenNotPaused() {
+    require(!paused, "Contract is paused");
+    _;
     }
     
     // ============ CONSTRUCTOR ============
@@ -145,6 +152,11 @@ contract MultiSigWallet {
         
         transaction.executed = true;
         
+        // Only block external calls when paused, allow governance calls (pause/unpause/addOwner/etc)
+        if (transaction.to != address(this) && paused) {
+            revert("Contract is paused");
+        }
+        
         (bool success, ) = transaction.to.call{value: transaction.value}(
             transaction.data
         );
@@ -208,6 +220,19 @@ contract MultiSigWallet {
         
         emit RequirementChanged(_numConfirmationsRequired);
     }
+    function pause() public {
+        require(msg.sender == address(this), "Only MultiSig can call this");
+        require(!paused, "Already paused");
+        paused = true;
+        emit Paused(msg.sender);
+    }
+
+function unpause() public {
+    require(msg.sender == address(this), "Only MultiSig can call this");
+    require(paused, "Not paused");
+    paused = false;
+    emit Unpaused(msg.sender);
+}
     
     // ============ VIEW FUNCTIONS ============
     

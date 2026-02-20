@@ -31,11 +31,11 @@ class HealthMonitor {
   }
   
   async checkContractHealth() {
-    try {
-      // Try to read owner count
+    try {    
       const owners = await this.contract.getOwners();
       const txCount = await this.contract.getTransactionCount();
-      const balance = await this.provider.getBalance(await this.contract.getAddress());
+      const contractAddr = this.contract.target || this.contract.address;
+      const balance = await this.provider.getBalance(contractAddr);
       
       this.health.contractResponsive = true;
       this.health.ownerCount = owners.length;

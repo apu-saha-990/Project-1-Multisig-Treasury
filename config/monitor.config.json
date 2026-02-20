@@ -1,9 +1,17 @@
 {
   "contract": {
-    "address": "0xdc8d6F7aF51120af2D6c5de861dfdC187eFE70a2",
+    "address": "0x725b0d267854A37f13ACB85E1A797EDdC7FCAEfE",
     "network": "sepolia"
   },
+  "rpc": {
+    "url": "https://eth-sepolia.g.alchemy.com/v2/hTZSfMlu96cU_EHKK8EER"
+  },
   "alerts": {
+    "enabled": true,
+    "discord": {
+      "enabled": true,
+      "webhookUrl": "https://discord.com/api/webhooks/1474363006182887587/z1sKR3aUIT7aJ5tpcv5ypuQT-oNfu_e5_BBfUsnxLTzpv1i4vR9lhoZA758WcqrhUhSw"
+    },
     "largeTransactionThreshold": "0.1",
     "criticalEvents": [
       "OwnerAdded",

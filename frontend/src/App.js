@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ethers } from "ethers";
-const CONTRACT_ADDRESS = "0xdc8d6F7aF51120af2D6c5de861dfdC187eFE70a2";
+const CONTRACT_ADDRESS = "0x725b0d267854A37f13ACB85E1A797EDdC7FCAEfE";
 
 const ABI = [
   "function getOwners() view returns (address[])",
@@ -14,7 +14,10 @@ const ABI = [
   "function revokeConfirmation(uint txIndex)",
   "function addOwner(address owner)",
   "function removeOwner(address owner)",
-  "function changeRequirement(uint required)"
+  "function changeRequirement(uint required)",
+  "function paused() view returns (bool)",
+  "function pause()",
+  "function unpause()"
 ];
 export default function App() {
   const [account, setAccount] = useState(null);
@@ -30,6 +33,7 @@ export default function App() {
   const [newOwner, setNewOwner] = useState("");
   const [removeOwnerAddr, setRemoveOwnerAddr] = useState("");
   const [newRequired, setNewRequired] = useState("");
+  const [isPaused, setIsPaused] = useState(false);
 async function connectWallet() {
     try {
       if (!window.ethereum) {
@@ -74,6 +78,12 @@ async function loadData(c, acc, provider) {
     } catch (e) {
       console.error("required error:", e.message);
     }
+    try {
+      const pausedStatus = await c.paused();
+      setIsPaused(pausedStatus);
+    } catch (e) {
+      console.error("paused error:", e.message);
+    }
 
     try {
       const bal = await provider.getBalance(CONTRACT_ADDRESS);
@@ -88,7 +98,17 @@ async function loadData(c, acc, provider) {
       for (let i = 0; i < txCount; i++) {
         const tx = await c.getTransaction(i);
         const confirmed = await c.isConfirmed(i, acc);
-        txs.push({ index: i, to: tx.to, value: ethers.utils.formatEther(tx.value), executed: tx.executed, numConfirmations: tx.numConfirmations.toString(), confirmed });
+        let txType = "ETH Transfer";
+        if (tx.data && tx.data.length > 2) {
+        const iface = new ethers.utils.Interface(ABI);
+        try {
+        const decoded = iface.parseTransaction({ data: tx.data });
+        txType = decoded.name;
+        } catch (e) {
+        txType = "Contract Call";
+  }
+}
+txs.push({ index: i, to: tx.to, value: ethers.utils.formatEther(tx.value), executed: tx.executed, numConfirmations: tx.numConfirmations.toString(), confirmed, txType });
       }
       setTransactions(txs.reverse());
     } catch (e) {
@@ -194,6 +214,35 @@ async function submitTx() {
     }
     setLoading(false);
   }
+  async function submitPause() {
+    setLoading(true);
+    try {
+      const iface = new ethers.utils.Interface(ABI);
+      const data = iface.encodeFunctionData("pause", []);
+      const tx = await contract.submitTransaction(CONTRACT_ADDRESS, 0, data);
+      await tx.wait();
+      alert("Pause proposal submitted! Needs approval from other owners.");
+      window.location.reload();
+    } catch (e) {
+      alert("Error: " + e.message);
+    }
+    setLoading(false);
+  }
+
+  async function submitUnpause() {
+    setLoading(true);
+    try {
+      const iface = new ethers.utils.Interface(ABI);
+      const data = iface.encodeFunctionData("unpause", []);
+      const tx = await contract.submitTransaction(CONTRACT_ADDRESS, 0, data);
+      await tx.wait();
+      alert("Unpause proposal submitted! Needs approval from other owners.");
+      window.location.reload();
+    } catch (e) {
+      alert("Error: " + e.message);
+    }
+    setLoading(false);
+  }
 return (
     <div style={{ fontFamily: "monospace", background: "#0a0a0a", minHeight: "100vh", color: "#00ff88", padding: "20px" }}>
       <h1 style={{ borderBottom: "1px solid #00ff88", paddingBottom: "10px" }}>⚡ MultiSig Treasury</h1>
@@ -205,10 +254,12 @@ return (
       ) : (
         <div>
           <div style={{ background: "#111", padding: "15px", marginBottom: "20px", border: "1px solid #333" }}>
-            <p>🔗 Connected: {account}</p>
+            <p>📍 Contract: {CONTRACT_ADDRESS}</p>
             <p>💰 Contract Balance: {balance} ETH</p>
             <p>👥 Owners: {owners.length} | Required Signatures: {required}</p>
+            <p>🔗 Connected: {account}</p>
             <p>🔑 You are {isOwner ? <span style={{ color: "#00ff88" }}>an OWNER</span> : <span style={{ color: "#ff4444" }}>NOT an owner</span>}</p>
+<p>⚠️ Contract Status: {isPaused ? <span style={{ color: "#ff4444" }}>PAUSED</span> : <span style={{ color: "#00ff88" }}>ACTIVE</span>}</p>
           </div>
 {isOwner && (
             <div style={{ background: "#111", padding: "15px", marginBottom: "20px", border: "1px solid #333" }}>
@@ -255,14 +306,28 @@ return (
         Change Requirement
       </button>
     </div>
-  </div>          
+  <div style={{ marginTop: "15px", paddingTop: "15px", borderTop: "1px solid #333" }}>
+      <h4 style={{ color: "#ff4444" }}>Emergency Controls</h4>
+      {!isPaused ? (
+        <button onClick={submitPause} disabled={loading} style={{ background: "#ff4444", color: "#fff", border: "none", padding: "10px 20px", cursor: "pointer", fontFamily: "monospace" }}>
+          🚨 Pause Contract
+        </button>
+      ) : (
+        <button onClick={submitUnpause} disabled={loading} style={{ background: "#00ff88", color: "#0a0a0a", border: "none", padding: "10px 20px", cursor: "pointer", fontFamily: "monospace" }}>
+          ✅ Unpause Contract
+        </button>
+      )}
+      <p style={{ fontSize: "11px", color: "#666", marginTop: "10px" }}>Pausing prevents transaction execution until unpaused</p>
+   </div>
+  </div>
           )}
 <div style={{ background: "#111", padding: "15px", border: "1px solid #333" }}>
             <h3>📋 Transactions ({transactions.length})</h3>
             {transactions.length === 0 && <p style={{ color: "#666" }}>No transactions yet</p>}
             {transactions.map(tx => (
               <div key={tx.index} style={{ borderBottom: "1px solid #222", padding: "15px 0" }}>
-                <p>#{tx.index} → {tx.to}</p>
+               <p>#{tx.index} | Type: <span style={{ color: "#00aaff" }}>{tx.txType}</span></p>
+                <p style={{ fontSize: "11px", color: "#666" }}>To: {tx.to}</p>
                 <p>Value: {tx.value} ETH | Confirmations: {tx.numConfirmations}/{required}</p>
                 <p>Status: {tx.executed ? <span style={{ color: "#00ff88" }}>✅ Executed</span> : <span style={{ color: "#ffaa00" }}>⏳ Pending</span>}</p>
                 {!tx.executed && isOwner && (

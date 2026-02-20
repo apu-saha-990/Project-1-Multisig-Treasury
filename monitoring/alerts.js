@@ -11,7 +11,7 @@ class AlertSystem {
     const alerts = [];
     
     // Check for large transactions
-    const valueInEth = ethers.formatEther(txData.value || 0);
+    const valueInEth = txData.value || "0";  // Already formatted by monitor
     const threshold = parseFloat(this.config.alerts.largeTransactionThreshold);
     
     if (parseFloat(valueInEth) > threshold) {
@@ -26,7 +26,7 @@ class AlertSystem {
     return alerts;
   }
   
-  evaluateEvent(eventName, eventData) {
+  evaluateEvent(eventName, eventData) {  
     const alerts = [];
     
     // Critical events
@@ -48,22 +48,52 @@ class AlertSystem {
         data: eventData
       });
     }
-    
     return alerts;
   }
   
-  sendAlert(alert) {
+  async sendAlert(alert) {
     // Log the alert
     switch(alert.level) {
       case 'CRITICAL':
         this.logger.critical(`🚨 ${alert.message}`, alert.data);
         break;
       case 'WARNING':
-        this.logger.warn(`⚠️  ${alert.message}`, alert.data);
+        this.logger.warn(`⚠️ ${alert.message}`, alert.data);
         break;
       case 'INFO':
-        this.logger.info(`ℹ️  ${alert.message}`, alert.data);
+        this.logger.info(`ℹ️ ${alert.message}`, alert.data);
         break;
+    }
+    
+    // Send to Discord if enabled
+    if (this.config.alerts.discord?.enabled && this.config.alerts.discord?.webhookUrl) {
+      try {
+        const embed = {
+          title: `🚨 ${alert.type} Alert`,
+          description: alert.message,
+          color: this.getAlertColor(alert.level),
+          fields: Object.entries(alert.data).map(([key, value]) => ({
+            name: key,
+            value: String(value),
+            inline: true
+          })),
+          timestamp: new Date().toISOString()
+        };
+        
+        const response = await fetch(this.config.alerts.discord.webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ embeds: [embed] })
+        });
+        
+        if (response.ok) {
+          this.logger.success('Alert sent to Discord');
+        } else {
+          this.logger.error('Discord webhook failed', { status: response.status });
+        }
+      } catch (error) {
+        this.logger.error('Failed to send Discord alert', { error: error.message });
+      }
     }
     
     // Store in history
@@ -76,6 +106,15 @@ class AlertSystem {
     if (this.alertHistory.length > 100) {
       this.alertHistory = this.alertHistory.slice(-100);
     }
+  }
+  
+  getAlertColor(severity) {
+    const colors = {
+      'CRITICAL': 15158332, // Red
+      'WARNING': 16776960,  // Yellow
+      'INFO': 3447003      // Blue
+    };
+    return colors[severity] || colors.INFO;
   }
   
   processAlerts(alerts) {

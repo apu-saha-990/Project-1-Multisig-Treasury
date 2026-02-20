@@ -1,3 +1,4 @@
+require('dotenv').config();
 const hre = require("hardhat");
 const Logger = require('./logger');
 const MetricsCollector = require('./metrics');
@@ -20,12 +21,15 @@ class MultiSigMonitor {
     
     try {
       // Get contract instance
-      const MultiSigWallet = await hre.ethers.getContractFactory("MultiSigWallet");
-      this.contract = MultiSigWallet.attach(config.contract.address);
+      const artifactPath = require('path').join(__dirname, '../artifacts/contracts/MultiSigWallet.sol/MultiSigWallet.json');
+      const artifact = require(artifactPath);
+      // Create Sepolia provider first
+this.provider = new hre.ethers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL || config.rpc.url);
+
+// Create contract connected to Sepolia provider
+this.contract = new hre.ethers.Contract(config.contract.address, artifact.abi, this.provider);
       
-      // Get provider
-      this.provider = hre.ethers.provider;
-      
+            
       // Initialize health monitor
       this.health = new HealthMonitor(this.logger, this.provider, this.contract);
       
