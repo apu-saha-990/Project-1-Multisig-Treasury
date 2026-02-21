@@ -327,7 +327,7 @@ return (
             {transactions.map(tx => (
               <div key={tx.index} style={{ borderBottom: "1px solid #222", padding: "15px 0" }}>
                <p>#{tx.index} | Type: <span style={{ color: "#00aaff" }}>{tx.txType}</span></p>
-                <p style={{ fontSize: "11px", color: "#666" }}>To: {tx.to}</p>
+               <p style={{ fontSize: "11px", color: "#666" }}>To: {tx.to}</p>
                 <p>Value: {tx.value} ETH | Confirmations: {tx.numConfirmations}/{required}</p>
                 <p>Status: {tx.executed ? <span style={{ color: "#00ff88" }}>✅ Executed</span> : <span style={{ color: "#ffaa00" }}>⏳ Pending</span>}</p>
                 {!tx.executed && isOwner && (
