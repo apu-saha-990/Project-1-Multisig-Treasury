@@ -101,7 +101,7 @@ class MetricsCollector {
     
     output += `# HELP multisig_uptime_seconds Monitor uptime in seconds\n`;
     output += `# TYPE multisig_uptime_seconds gauge\n`;
-    output += `multisig_uptime_seconds ${metrics.uptime}\n\n`;
+    output += `multisig_uptime_seconds ${metrics.uptime} # ${metrics.uptimeFormatted}\n\n`;
     
     return output;
   }
