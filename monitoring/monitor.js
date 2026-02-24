@@ -226,6 +226,7 @@ this.contract = new hre.ethers.Contract(config.contract.address, artifact.abi, t
     this.setupEventListeners();
     this.startHealthChecks();
     this.startMetricsExport();
+    this.metrics.startServer(9090);
     
     this.running = true;
     

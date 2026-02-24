@@ -105,6 +105,32 @@ class MetricsCollector {
     
     return output;
   }
+  startServer(port = 9090) {
+    const http = require('http');
+    
+    this.server = http.createServer((req, res) => {
+      if (req.url === '/metrics') {
+        res.writeHead(200, { 'Content-Type': 'text/plain; version=0.0.4' });
+        res.end(this.getPrometheusMetrics());
+      } else if (req.url === '/health') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'ok', uptime: this.getMetrics().uptimeFormatted }));
+      } else {
+        res.writeHead(404);
+        res.end('Not found');
+      }
+    });
+
+    this.server.listen(port, () => {
+      this.logger.info(`Prometheus metrics available at http://localhost:${port}/metrics`);
+    });
+  }
+
+  stopServer() {
+    if (this.server) {
+      this.server.close();
+    }
+  }
 }
 
 module.exports = MetricsCollector;
