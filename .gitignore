@@ -5,3 +5,5 @@ artifacts/
 frontend/node_modules/
 logs/
 metrics/
+arguments.js
+package-lock.json
