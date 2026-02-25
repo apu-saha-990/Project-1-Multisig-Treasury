@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ethers } from "ethers";
-const CONTRACT_ADDRESS = "0x207B13B8ea25E7788f1b2e5c3705a84fDC8508E5";
+const CONTRACT_ADDRESS = "0x60Baaa4E30b48a74c40F2bFA85866C0b48f21aB7";
 
 const ABI = [
   "function getOwners() view returns (address[])",
