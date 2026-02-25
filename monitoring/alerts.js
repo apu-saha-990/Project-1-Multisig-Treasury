@@ -66,7 +66,8 @@ class AlertSystem {
     }
     
     // Send to Discord if enabled
-    if (this.config.alerts.discord?.enabled && this.config.alerts.discord?.webhookUrl) {
+    const webhookUrl = process.env.DISCORD_WEBHOOK_URL || this.config.alerts.discord?.webhookUrl;
+if (this.config.alerts.discord?.enabled && webhookUrl) {
       try {
         const embed = {
           title: `🚨 ${alert.type} Alert`,
@@ -80,7 +81,7 @@ class AlertSystem {
           timestamp: new Date().toISOString()
         };
         
-        const response = await fetch(this.config.alerts.discord.webhookUrl, {
+        const response = await fetch(webhookUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ embeds: [embed] })

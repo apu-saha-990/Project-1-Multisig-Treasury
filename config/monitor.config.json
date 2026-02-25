@@ -1,6 +1,6 @@
 {
   "contract": {
-    "address": "0x207B13B8ea25E7788f1b2e5c3705a84fDC8508E5",
+    "address": "0x4981f4A34789ef08f0516De3Ca891740385D89c4",
     "network": "sepolia"
   },
   "rpc": {
@@ -10,7 +10,7 @@
     "enabled": true,
     "discord": {
       "enabled": true,
-      "webhookUrl": "https://discord.com/api/webhooks/1474363006182887587/z1sKR3aUIT7aJ5tpcv5ypuQT-oNfu_e5_BBfUsnxLTzpv1i4vR9lhoZA758WcqrhUhSw"
+      "webhookUrl": ""
     },
     "largeTransactionThreshold": "0.1",
     "criticalEvents": [
