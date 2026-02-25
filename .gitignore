@@ -7,3 +7,4 @@ logs/
 metrics/
 arguments.js
 package-lock.json
+COMMANDS.md
