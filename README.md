@@ -592,6 +592,9 @@ For any real treasury: use Safe. For understanding what Safe is doing under the 
 - Transaction cancellation by owner consensus
 - Block-range backfill on monitor reconnection
 - Grafana dashboard for Prometheus metrics
+- Auto-restart on monitor crash (PM2 or systemd process manager)
+- Historical transaction backfill on monitor reconnection
+- Persistent event storage so history survives restarts
 
 **Infrastructure evolution:**
 - Self-operated Geth/Erigon node to eliminate RPC dependency
