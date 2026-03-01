@@ -35,7 +35,7 @@ I'm a career changer coming from a factory background — no CS degree, no bootc
 
 What I own: the decisions. What to build, how it's structured, when something broke and why. The Post-Mortem below is a real example of that process.
 
-The systems run. The tests pass. I can demo everything live.
+The system is fully test-covered and demo-ready.
 
 ---
 
