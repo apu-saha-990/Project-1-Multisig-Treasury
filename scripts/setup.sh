@@ -191,7 +191,7 @@ press_enter
 print_step "3" "Cloning Project from GitHub"
 
 echo -e "  Enter the GitHub repository URL to clone."
-echo -e "  Example: https://github.com/artcelltarafder-pixel/Project01-multisg-treasury.git"
+echo -e "  Example: https://github.com/apu-saha-990/Project01-multisig-treasury.git"
 echo ""
 echo -e "${BOLD}  GitHub URL: ${NC}\c"
 read repo_url
