@@ -34,7 +34,7 @@ No single person can act alone. The rules are enforced automatically — there i
 
 **A web interface** — owners connect their personal wallet, see all pending transactions, approve or reject them, and trigger payments once enough approvals are collected.
 
-**A monitoring system** — watches the wallet around the clock and sends an alert to Discord the moment a large transaction is proposed or ownership changes hands.
+**A monitoring system** — watches the wallet around the clock and sends an alert to Discord the moment a large transaction is proposed or ownership changes hands. Deposits are logged and tracked in metrics but do not trigger alerts by design — governance and large movements only.
 
 **A live activity tracker** — keeps a running count of every transaction, approval, and execution. Plugs into standard industry monitoring tools without any extra setup.
 
@@ -126,7 +126,7 @@ The systems run. The tests pass. I can demo everything live.
 # Full setup — installs everything, runs all tests, deploys
 bash scripts/setup.sh
 
-# Start the monitoring system
+# Start the monitoring system (run from project root)
 npx hardhat run scripts/startMonitor.js --network sepolia
 
 # Start the web interface
@@ -156,13 +156,29 @@ Copy `.env.example` to `.env`. Never commit your `.env` file.
 
 ---
 
-## What's Next
+## Roadmap
 
-- Add a time delay — once approved, wait 24 to 48 hours before the payment can be sent
-- Let owners cancel a transaction by agreement
+**Security**
+- Formal security audit before any mainnet or production deployment
+- Hardware wallet enforcement — require all owner keys on hardware devices, no hot wallets
+- Immutable audit log — all events written to a tamper-evident store, nothing deletable
+- Multi-layer key storage — no two owner keys on the same device or network
+- Rate limiting — cap transactions submitted within a given time window
+- Incident response playbook — documented steps for key compromise or contract breach
+
+**Reliability**
+- Auto-restart monitoring system if it crashes
 - Keep monitoring history saved so it survives restarts
-- Add a visual dashboard for the activity stats
-- Auto-restart the monitoring system if it crashes
+- Replay missed events automatically if the monitor disconnects
+
+**Governance**
+- Add a time delay — once approved, wait 24 to 48 hours before execution
+- Let owners cancel a transaction by agreement
+- Discord alerts for deposit events with a configurable threshold — avoid noise on small amounts
+
+**Observability**
+- Visual dashboard for the live activity stats
+- Deploy to a cheaper network for lower transaction costs
 
 ---
 
