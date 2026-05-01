@@ -231,5 +231,3 @@ For a real treasury holding real money — use the existing tool. It has been au
 This project exists to understand what that tool is doing under the hood. Using it is one skill. Understanding it is another. This build is about the second one.
 
 ---
-
-*Career changer from manufacturing. Learning in public. Building real things.*
