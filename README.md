@@ -34,13 +34,13 @@ No single person can act alone. The rules are enforced automatically — there i
 
 **A web interface** — owners connect their personal wallet, see all pending transactions, approve or reject them, and trigger payments once enough approvals are collected.
 
-**A monitoring system** — watches the wallet around the clock and sends an alert to Discord the moment a large transaction is proposed or ownership changes hands. Deposits are logged and tracked in metrics but do not trigger alerts by design — governance and large movements only.
+**A monitoring system** — watches the wallet around the clock and sends an alert to Discord the moment a large transaction is proposed or ownership changes hands. Deposits are logged and tracked but do not trigger alerts by design — only big movements and ownership changes do.
 
-**A live activity tracker** — keeps a running count of every transaction, approval, and execution. Plugs into standard industry monitoring tools without any extra setup.
+**A live activity counter** — keeps a running count of every transaction, approval, and execution updated in real time. Other tools can read these numbers automatically without any extra setup.
 
 **Automated tests** — 25 tests that verify every feature works correctly before anything gets deployed. If any test fails, deployment is blocked.
 
-**Automatic code checks** — every time code is pushed to GitHub, all tests run automatically. Broken code is caught immediately before it can cause problems.
+**Automatic code checks** — every time code is pushed to GitHub, all 25 tests run automatically. Broken code is caught immediately before it can cause problems.
 
 ---
 
@@ -99,13 +99,13 @@ The systems run. The tests pass. I can demo everything live.
 
 ## What I Learned
 
-- How a shared approval wallet works at the rule level — not just how to use one
-- Why the order of operations matters when money is involved — update the records before sending, not after
-- How to write tests that check for failure, not just success
-- Why sending ETH the old way breaks with modern wallets — and what the current standard is
-- How to build a real-time monitoring system that connects to industry-standard tools
-- How to publish contract source code publicly so anyone can inspect it
-- How to automate deployment so broken code can never reach the network
+- How a shared approval wallet works at the rules level — not just how to use one, but what it is actually doing under the hood
+- Why the order of operations matters when money is involved — update the record of what happened before sending, not after. Getting that backwards can mean money moves twice
+- How to write tests that check for failure, not just success — the pause bug would have been caught earlier if I had tested what happens when things go wrong
+- Why sending ETH the old way breaks with modern wallets — there is a newer, safer way to do it and the old approach no longer works reliably
+- How to build a monitoring system that watches a wallet around the clock and sends alerts when something important happens
+- How to publish the wallet rules publicly so anyone can inspect exactly what the code does — important for trust
+- How to set up automatic checks so broken code can never reach the network
 
 ---
 
@@ -114,7 +114,7 @@ The systems run. The tests pass. I can demo everything live.
 | Version | What Changed |
 |---|---|
 | v1 | First working deployment |
-| v2 | Added ability to add and remove owners without redeploying the whole wallet |
+| v2 | Added ability to add and remove owners without rebuilding the whole wallet |
 | v3 | Added emergency pause — had a critical bug (see above) |
 | v4 | Bug fixed. Added live monitoring, real-time USD cost display, Discord alerts — **current** |
 
@@ -132,7 +132,7 @@ npx hardhat run scripts/startMonitor.js --network sepolia
 # Start the web interface
 cd frontend && npm start
 
-# Check live activity stats
+# Check live activity numbers
 curl http://localhost:9090/metrics
 ```
 
@@ -142,8 +142,8 @@ curl http://localhost:9090/metrics
 
 ```bash
 PRIVATE_KEY=                   # The deployer's private key — never commit this
-SEPOLIA_RPC_URL=               # Network connection endpoint from Alchemy
-ETHERSCAN_API_KEY=             # For publishing the source code publicly
+SEPOLIA_RPC_URL=               # Address of the test network connection
+ETHERSCAN_API_KEY=             # For publishing the wallet rules publicly
 COINMARKETCAP_API_KEY=         # For showing live USD transaction costs
 DISCORD_WEBHOOK_URL=           # Where alerts get sent
 OWNER_1=0x...                  # First wallet owner address
@@ -156,29 +156,21 @@ Copy `.env.example` to `.env`. Never commit your `.env` file.
 
 ---
 
-## Roadmap
+## What's Next
 
-**Security**
-- Formal security audit before any mainnet or production deployment
-- Hardware wallet enforcement — require all owner keys on hardware devices, no hot wallets
-- Immutable audit log — all events written to a tamper-evident store, nothing deletable
-- Multi-layer key storage — no two owner keys on the same device or network
-- Rate limiting — cap transactions submitted within a given time window
-- Incident response playbook — documented steps for key compromise or contract breach
+- **Security review before going live with real money** — the wallet works on a test network. Before pointing it at a real network, it needs a formal check by someone whose job is finding problems in code like this.
 
-**Reliability**
-- Auto-restart monitoring system if it crashes
-- Keep monitoring history saved so it survives restarts
-- Replay missed events automatically if the monitor disconnects
+- **Owner keys on hardware devices** — right now owner keys can live anywhere. Requiring them to be on a physical hardware device that never connects to the internet removes a whole category of theft risk.
 
-**Governance**
-- Add a time delay — once approved, wait 24 to 48 hours before execution
-- Let owners cancel a transaction by agreement
-- Discord alerts for deposit events with a configurable threshold — avoid noise on small amounts
+- **A time delay on approved transactions** — once a transaction is approved, it executes immediately. Adding a 24 to 48 hour waiting period before execution gives owners time to catch a mistake or a compromised approval before the money actually moves.
 
-**Observability**
-- Visual dashboard for the live activity stats
-- Deploy to a cheaper network for lower transaction costs
+- **Let owners cancel by agreement** — right now there is no way to cancel an approved transaction. Adding a cancel option that requires the same approval threshold as execution gives owners a way out if something goes wrong.
+
+- **Keep monitoring history across restarts** — right now if the monitoring system restarts, the history is gone. Saving it means nothing gets lost.
+
+- **A visual dashboard for the live activity numbers** — right now the numbers are available but you need to know how to read them. A simple visual dashboard makes them readable at a glance.
+
+- **Discord alerts for deposits above a set amount** — deposits are currently logged but don't trigger alerts. Adding a threshold means large incoming deposits get flagged, not just outgoing ones.
 
 ---
 
@@ -186,13 +178,13 @@ Copy `.env.example` to `.env`. Never commit your `.env` file.
 
 | What it does | Technology |
 |---|---|
-| Wallet logic and approval rules | Solidity 0.8.28 |
+| Wallet rules and approval logic | Solidity 0.8.28 |
 | Development and testing environment | Hardhat |
-| Connects the app to the network | Ethers.js v6 |
-| Network connection | Alchemy (Sepolia testnet) |
+| Connects the web interface to the network | Ethers.js v6 |
+| Test network connection | Alchemy (Sepolia testnet) |
 | Web interface | React + MetaMask |
-| Real-time monitoring system | Node.js |
-| Activity metrics format | Prometheus |
+| Monitoring system | Node.js |
+| Live activity numbers | Prometheus |
 | Transaction alerts | Discord Webhooks |
 | Live USD cost display | CoinMarketCap API |
 | Automatic test runs on every code push | GitHub Actions |
