@@ -1,0 +1,205 @@
+<svg width="100%" viewBox="0 0 680 820" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Project 01 – Multisig Treasury Wallet Architecture</title>
+<desc>Clean white and navy architecture diagram for a 2-of-3 multisig wallet on Ethereum Sepolia.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</marker>
+</defs>
+<rect x="0" y="0" width="680" height="820" fill="#ffffff"/>
+<rect x="0" y="0" width="680" height="38" fill="#1a2e4a"/>
+<text x="16" y="24" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#ffffff" letter-spacing="0.5">PROJECT 01 — MULTISIG TREASURY WALLET // ARCHITECTURE</text>
+<text x="664" y="24" font-family="Arial, sans-serif" font-size="9" fill="#93c5fd" text-anchor="end">Ethereum Sepolia · 2-of-3 Multisig</text>
+
+<!-- SIGNERS -->
+<text x="16" y="54" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#64748b" letter-spacing="1.5">SIGNERS</text>
+<rect x="16" y="60" width="145" height="58" rx="5" fill="#ffffff" stroke="#1a2e4a" stroke-width="1"/>
+<text x="88" y="77" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#1a2e4a" text-anchor="middle">OWNER 1</text>
+<text x="88" y="91" font-family="Arial, sans-serif" font-size="8" fill="#1a2e4a" text-anchor="middle">0xOwner... EOA WALLET</text>
+<text x="88" y="105" font-family="Arial, sans-serif" font-size="7.5" fill="#64748b" text-anchor="middle">Hardware wallet recommended</text>
+<rect x="171" y="60" width="145" height="58" rx="5" fill="#ffffff" stroke="#1a2e4a" stroke-width="1"/>
+<text x="243" y="77" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#1a2e4a" text-anchor="middle">OWNER 2</text>
+<text x="243" y="91" font-family="Arial, sans-serif" font-size="8" fill="#1a2e4a" text-anchor="middle">0xOwner... EOA WALLET</text>
+<text x="243" y="105" font-family="Arial, sans-serif" font-size="7.5" fill="#64748b" text-anchor="middle">Hardware wallet recommended</text>
+<rect x="326" y="60" width="145" height="58" rx="5" fill="#ffffff" stroke="#1a2e4a" stroke-width="1"/>
+<text x="398" y="77" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#1a2e4a" text-anchor="middle">OWNER 3</text>
+<text x="398" y="91" font-family="Arial, sans-serif" font-size="8" fill="#1a2e4a" text-anchor="middle">0xOwner... EOA WALLET</text>
+<text x="398" y="105" font-family="Arial, sans-serif" font-size="7.5" fill="#64748b" text-anchor="middle">Hardware wallet recommended</text>
+<rect x="481" y="60" width="183" height="58" rx="5" fill="#1a2e4a" stroke="#1a2e4a" stroke-width="1"/>
+<text x="572" y="77" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#ffffff" text-anchor="middle">THRESHOLD</text>
+<text x="572" y="91" font-family="Arial, sans-serif" font-size="8" fill="#93c5fd" text-anchor="middle">2-of-3 (M-of-N configurable)</text>
+<text x="572" y="105" font-family="Arial, sans-serif" font-size="7.5" fill="#bfdbfe" text-anchor="middle">No single owner can act alone</text>
+<line x1="88" y1="118" x2="88" y2="146" stroke="#1a2e4a" stroke-width="0.8" marker-end="url(#arrow)"/>
+<line x1="243" y1="118" x2="243" y2="146" stroke="#1a2e4a" stroke-width="0.8" marker-end="url(#arrow)"/>
+<line x1="398" y1="118" x2="398" y2="146" stroke="#1a2e4a" stroke-width="0.8" marker-end="url(#arrow)"/>
+
+<!-- INTERFACES -->
+<line x1="0" y1="138" x2="680" y2="138" stroke="#e2e8f0" stroke-width="0.5"/>
+<text x="16" y="148" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#64748b" letter-spacing="1.5">INTERFACES</text>
+<rect x="16" y="154" width="218" height="114" rx="5" fill="#ffffff" stroke="#1a2e4a" stroke-width="1"/>
+<rect x="16" y="154" width="218" height="20" rx="5" fill="#1a2e4a"/>
+<rect x="16" y="164" width="218" height="10" fill="#1a2e4a"/>
+<text x="26" y="168" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#ffffff">FRONTEND</text>
+<text x="26" y="184" font-family="Arial, sans-serif" font-size="7.5" fill="#64748b">React · Ethers.js · localhost:3000</text>
+<text x="26" y="197" font-family="Arial, sans-serif" font-size="7.5" fill="#334155">- Propose new transaction</text>
+<text x="26" y="209" font-family="Arial, sans-serif" font-size="7.5" fill="#334155">- Approve / revoke confirmation</text>
+<text x="26" y="221" font-family="Arial, sans-serif" font-size="7.5" fill="#334155">- View pending tx queue</text>
+<text x="26" y="233" font-family="Arial, sans-serif" font-size="7.5" fill="#334155">- Owner management panel</text>
+<text x="26" y="245" font-family="Arial, sans-serif" font-size="7.5" fill="#334155">- Live tx status feed</text>
+<rect x="244" y="154" width="218" height="114" rx="5" fill="#ffffff" stroke="#1a2e4a" stroke-width="1"/>
+<rect x="244" y="154" width="218" height="20" rx="5" fill="#1a2e4a"/>
+<rect x="244" y="164" width="218" height="10" fill="#1a2e4a"/>
+<text x="254" y="168" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#ffffff">HARDHAT SCRIPTS</text>
+<text x="254" y="184" font-family="Arial, sans-serif" font-size="7.5" fill="#64748b">Node.js · Ethers.js · Bash wrappers</text>
+<text x="254" y="197" font-family="Arial, sans-serif" font-size="7.5" fill="#334155">- setup.sh – install + test + deploy</text>
+<text x="254" y="209" font-family="Arial, sans-serif" font-size="7.5" fill="#334155">- deploy.js – contract deployment</text>
+<text x="254" y="221" font-family="Arial, sans-serif" font-size="7.5" fill="#334155">- startMonitor.js – event listener</text>
+<text x="254" y="233" font-family="Arial, sans-serif" font-size="7.5" fill="#334155">- uninstall.sh – clean reset</text>
+<text x="254" y="245" font-family="Arial, sans-serif" font-size="7.5" fill="#334155">- arguments.js – auto-generated verify</text>
+<text x="125" y="278" font-family="Arial, sans-serif" font-size="7.5" fill="#64748b" text-anchor="middle">Ethers.js</text>
+<line x1="125" y1="268" x2="125" y2="298" stroke="#1a2e4a" stroke-width="0.7" stroke-dasharray="3,2" marker-end="url(#arrow)"/>
+<text x="353" y="278" font-family="Arial, sans-serif" font-size="7.5" fill="#64748b" text-anchor="middle">deploy.js</text>
+<line x1="353" y1="268" x2="353" y2="298" stroke="#1a2e4a" stroke-width="0.7" stroke-dasharray="3,2" marker-end="url(#arrow)"/>
+
+<!-- SMART CONTRACT CORE -->
+<line x1="0" y1="290" x2="680" y2="290" stroke="#e2e8f0" stroke-width="0.5"/>
+<text x="16" y="300" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#64748b" letter-spacing="1.5">SMART CONTRACT — CORE</text>
+<rect x="16" y="306" width="496" height="192" rx="6" fill="#f8faff" stroke="#1a2e4a" stroke-width="1.2"/>
+<text x="26" y="325" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#1a2e4a">MultiSigWallet.sol</text>
+<text x="26" y="338" font-family="Arial, sans-serif" font-size="7.5" fill="#64748b">Solidity · Sepolia · 0x60Baaa4E30b48a74c40F2bFA85866C0b48f21aB7</text>
+<rect x="26" y="346" width="148" height="138" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8"/>
+<text x="36" y="360" font-family="Arial, sans-serif" font-size="7" fill="#64748b" font-weight="600">STAGE 1</text>
+<text x="36" y="373" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#1a2e4a">PROPOSE</text>
+<text x="36" y="386" font-family="Arial, sans-serif" font-size="7.5" fill="#334155">submitTransaction()</text>
+<text x="36" y="400" font-family="Arial, sans-serif" font-size="7" fill="#475569">- Owner submits: to, value, data</text>
+<text x="36" y="412" font-family="Arial, sans-serif" font-size="7" fill="#475569">- Stored to transactions[] array</text>
+<text x="36" y="424" font-family="Arial, sans-serif" font-size="7" fill="#475569">- Emits SubmitTransaction event</text>
+<text x="36" y="436" font-family="Arial, sans-serif" font-size="7" fill="#475569">- Confirmation count starts at 0</text>
+<line x1="174" y1="400" x2="190" y2="400" stroke="#1a2e4a" stroke-width="0.8" marker-end="url(#arrow)"/>
+<text x="182" y="396" font-family="Arial, sans-serif" font-size="6.5" fill="#64748b" text-anchor="middle">≥0</text>
+<rect x="190" y="346" width="156" height="138" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8"/>
+<text x="200" y="360" font-family="Arial, sans-serif" font-size="7" fill="#64748b" font-weight="600">STAGE 2</text>
+<text x="200" y="373" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#1a2e4a">APPROVE</text>
+<text x="200" y="386" font-family="Arial, sans-serif" font-size="7.5" fill="#334155">confirmTransaction()</text>
+<text x="200" y="400" font-family="Arial, sans-serif" font-size="7" fill="#475569">- Any owner calls confirm</text>
+<text x="200" y="412" font-family="Arial, sans-serif" font-size="7" fill="#475569">- isConfirmed[txId][owner] = true</text>
+<text x="200" y="424" font-family="Arial, sans-serif" font-size="7" fill="#475569">- O(1) mapping – no array scan</text>
+<text x="200" y="436" font-family="Arial, sans-serif" font-size="7" fill="#475569">- Prevents double-confirm check</text>
+<line x1="346" y1="400" x2="362" y2="400" stroke="#1a2e4a" stroke-width="0.8" marker-end="url(#arrow)"/>
+<text x="354" y="396" font-family="Arial, sans-serif" font-size="6.5" fill="#64748b" text-anchor="middle">≥ threshold</text>
+<rect x="362" y="346" width="140" height="138" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8"/>
+<text x="372" y="360" font-family="Arial, sans-serif" font-size="7" fill="#64748b" font-weight="600">STAGE 3</text>
+<text x="372" y="373" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#1a2e4a">EXECUTE</text>
+<text x="372" y="386" font-family="Arial, sans-serif" font-size="7.5" fill="#334155">executeTransaction()</text>
+<text x="372" y="400" font-family="Arial, sans-serif" font-size="7" fill="#475569">- Requires confirmations ≥ threshold</text>
+<text x="372" y="412" font-family="Arial, sans-serif" font-size="7" fill="#475569">- Sets executed=true FIRST (CEI)</text>
+<text x="372" y="424" font-family="Arial, sans-serif" font-size="7" fill="#475569">- .call() – no 2300 gas limit</text>
+<text x="372" y="436" font-family="Arial, sans-serif" font-size="7" fill="#475569">- One-way door – no undo</text>
+<rect x="22" y="482" width="484" height="12" rx="3" fill="#eef2ff"/>
+<text x="264" y="491" font-family="Arial, sans-serif" font-size="7" fill="#3730a3" text-anchor="middle">executed=true is set before .call() — Checks-Effects-Interactions prevents reentrancy attack</text>
+<rect x="522" y="306" width="142" height="86" rx="5" fill="#ffffff" stroke="#1a2e4a" stroke-width="1"/>
+<rect x="522" y="306" width="142" height="20" rx="5" fill="#1a2e4a"/>
+<rect x="522" y="316" width="142" height="10" fill="#1a2e4a"/>
+<text x="532" y="320" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#ffffff">ALCHEMY</text>
+<text x="532" y="338" font-family="Arial, sans-serif" font-size="7.5" fill="#64748b">RPC Provider · WebSocket</text>
+<text x="532" y="351" font-family="Arial, sans-serif" font-size="7" fill="#334155">- wss:// WebSocket (Sepolia)</text>
+<text x="532" y="363" font-family="Arial, sans-serif" font-size="7" fill="#334155">- JSON-RPC for tx submission</text>
+<text x="532" y="375" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Provider swap = 1 line change</text>
+<line x1="512" y1="338" x2="522" y2="338" stroke="#1a2e4a" stroke-width="0.7" marker-end="url(#arrow)"/>
+<text x="507" y="334" font-family="Arial, sans-serif" font-size="6.5" fill="#64748b" text-anchor="end">JSON-RPC</text>
+<rect x="522" y="402" width="142" height="96" rx="5" fill="#ffffff" stroke="#1a2e4a" stroke-width="1"/>
+<rect x="522" y="402" width="142" height="20" rx="5" fill="#1a2e4a"/>
+<rect x="522" y="412" width="142" height="10" fill="#1a2e4a"/>
+<text x="532" y="416" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#ffffff">ETHEREUM SEPOLIA</text>
+<text x="532" y="434" font-family="Arial, sans-serif" font-size="7.5" fill="#64748b">EVM Testnet · Mainnet rules</text>
+<text x="532" y="447" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Free ETH – zero real cost</text>
+<text x="532" y="459" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Contract: 0x60B...aB7</text>
+<text x="532" y="471" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Etherscan verified source code</text>
+<text x="532" y="483" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Mainnet deploy = 1 config change</text>
+<line x1="593" y1="392" x2="593" y2="402" stroke="#1a2e4a" stroke-width="0.7" marker-end="url(#arrow)"/>
+
+<!-- OBSERVABILITY -->
+<line x1="0" y1="510" x2="680" y2="510" stroke="#e2e8f0" stroke-width="0.5"/>
+<text x="16" y="520" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#64748b" letter-spacing="1.5">OBSERVABILITY &amp; CI / CD</text>
+<rect x="16" y="526" width="152" height="126" rx="5" fill="#ffffff" stroke="#1a2e4a" stroke-width="1"/>
+<rect x="16" y="526" width="152" height="20" rx="5" fill="#1a2e4a"/>
+<rect x="16" y="536" width="152" height="10" fill="#1a2e4a"/>
+<text x="26" y="540" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#ffffff">EVENT MONITOR</text>
+<text x="26" y="557" font-family="Arial, sans-serif" font-size="7.5" fill="#64748b">Node.js · startMonitor.js</text>
+<text x="26" y="570" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Listens: SubmitTransaction</text>
+<text x="26" y="582" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Listens: ConfirmTransaction</text>
+<text x="26" y="594" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Listens: ExecuteTransaction</text>
+<text x="26" y="606" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Listens: RevokeConfirmation</text>
+<text x="26" y="618" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Auto-reconnects on drop</text>
+<text x="26" y="630" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Exposes /metrics endpoint</text>
+<line x1="168" y1="590" x2="178" y2="590" stroke="#1a2e4a" stroke-width="0.7" marker-end="url(#arrow)"/>
+<text x="173" y="586" font-family="Arial, sans-serif" font-size="6.5" fill="#64748b" text-anchor="middle">metrics</text>
+<rect x="178" y="526" width="152" height="126" rx="5" fill="#ffffff" stroke="#1a2e4a" stroke-width="1"/>
+<rect x="178" y="526" width="152" height="20" rx="5" fill="#1a2e4a"/>
+<rect x="178" y="536" width="152" height="10" fill="#1a2e4a"/>
+<text x="188" y="540" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#ffffff">PROMETHEUS</text>
+<text x="188" y="557" font-family="Arial, sans-serif" font-size="7.5" fill="#64748b">Port 9090 · scrape interval 30s</text>
+<text x="188" y="570" font-family="Arial, sans-serif" font-size="7" fill="#334155">- tx_submitted_total</text>
+<text x="188" y="582" font-family="Arial, sans-serif" font-size="7" fill="#334155">- tx_confirmed_total</text>
+<text x="188" y="594" font-family="Arial, sans-serif" font-size="7" fill="#334155">- tx_executed_total</text>
+<text x="188" y="606" font-family="Arial, sans-serif" font-size="7" fill="#334155">- confirmation_lag_seconds</text>
+<text x="188" y="618" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Plugins into any ops stack</text>
+<text x="188" y="630" font-family="Arial, sans-serif" font-size="7" fill="#334155">- curl localhost:9090/metrics</text>
+<line x1="330" y1="590" x2="340" y2="590" stroke="#1a2e4a" stroke-width="0.7" marker-end="url(#arrow)"/>
+<text x="335" y="586" font-family="Arial, sans-serif" font-size="6.5" fill="#64748b" text-anchor="middle">alerts</text>
+<rect x="340" y="526" width="156" height="126" rx="5" fill="#ffffff" stroke="#1a2e4a" stroke-width="1"/>
+<rect x="340" y="526" width="156" height="20" rx="5" fill="#1a2e4a"/>
+<rect x="340" y="536" width="156" height="10" fill="#1a2e4a"/>
+<text x="350" y="540" font-family="Arial, sans-serif" font-size="8.5" font-weight="700" fill="#ffffff">ALERTMANAGER / DISCORD</text>
+<text x="350" y="557" font-family="Arial, sans-serif" font-size="7.5" fill="#64748b">Discord webhook · threshold alerts</text>
+<text x="350" y="570" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Large transaction alert</text>
+<text x="350" y="582" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Execution without quorum</text>
+<text x="350" y="594" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Owner added / removed</text>
+<text x="350" y="606" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Contract paused event</text>
+<text x="350" y="618" font-family="Arial, sans-serif" font-size="7" fill="#334155">- Webhook: one URL in config</text>
+<rect x="506" y="526" width="158" height="126" rx="5" fill="#ffffff" stroke="#1a2e4a" stroke-width="1"/>
+<rect x="506" y="526" width="158" height="20" rx="5" fill="#1a2e4a"/>
+<rect x="506" y="536" width="158" height="10" fill="#1a2e4a"/>
+<text x="516" y="540" font-family="Arial, sans-serif" font-size="8.5" font-weight="700" fill="#ffffff">GITHUB ACTIONS CI/CD</text>
+<text x="516" y="557" font-family="Arial, sans-serif" font-size="7.5" fill="#64748b">.github/workflows/ci.yml</text>
+<text x="516" y="570" font-family="Arial, sans-serif" font-size="7" fill="#334155">1  npm install</text>
+<text x="516" y="582" font-family="Arial, sans-serif" font-size="7" fill="#334155">2  Run 25-test suite</text>
+<text x="516" y="594" font-family="Arial, sans-serif" font-size="7" fill="#334155">3  Gas report + USD table</text>
+<text x="516" y="606" font-family="Arial, sans-serif" font-size="7" fill="#b91c1c">4  FAIL → block deploy</text>
+<text x="516" y="618" font-family="Arial, sans-serif" font-size="7" fill="#15803d">5  PASS → deploy Sepolia ✓</text>
+<text x="516" y="642" font-family="Arial, sans-serif" font-size="7" fill="#15803d">25/25 TESTS PASSING · unit + edge-case</text>
+
+<!-- SECURITY PATTERNS — 6 boxes, each 99px wide with 5px gap -->
+<line x1="0" y1="664" x2="680" y2="664" stroke="#e2e8f0" stroke-width="0.5"/>
+<text x="16" y="674" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#64748b" letter-spacing="1.5">SECURITY PATTERNS</text>
+<rect x="10" y="680" width="104" height="72" rx="4" fill="#ffffff" stroke="#1a2e4a" stroke-width="0.8"/>
+<text x="18" y="694" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#1a2e4a">REENTRANCY</text>
+<text x="18" y="707" font-family="Arial, sans-serif" font-size="6.5" fill="#475569">Checks-Effects-Interactions</text>
+<text x="18" y="719" font-family="Arial, sans-serif" font-size="6.5" fill="#475569">executed=true before .call()</text>
+<rect x="119" y="680" width="104" height="72" rx="4" fill="#ffffff" stroke="#1a2e4a" stroke-width="0.8"/>
+<text x="127" y="694" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#1a2e4a">ACCESS CONTROL</text>
+<text x="127" y="707" font-family="Arial, sans-serif" font-size="6.5" fill="#475569">onlyOwner modifier</text>
+<text x="127" y="719" font-family="Arial, sans-serif" font-size="6.5" fill="#475569">All state-changing functions</text>
+<rect x="228" y="680" width="104" height="72" rx="4" fill="#ffffff" stroke="#1a2e4a" stroke-width="0.8"/>
+<text x="236" y="694" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#1a2e4a">REPLAY ATTACK</text>
+<text x="236" y="707" font-family="Arial, sans-serif" font-size="6.5" fill="#475569">executed flag = one-way door</text>
+<text x="236" y="719" font-family="Arial, sans-serif" font-size="6.5" fill="#475569">Cannot re-execute</text>
+<rect x="337" y="680" width="104" height="72" rx="4" fill="#ffffff" stroke="#1a2e4a" stroke-width="0.8"/>
+<text x="345" y="694" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#1a2e4a">GAS (.call)</text>
+<text x="345" y="707" font-family="Arial, sans-serif" font-size="6.5" fill="#475569">No 2300 limit</text>
+<text x="345" y="719" font-family="Arial, sans-serif" font-size="6.5" fill="#475569">Works with all modern contracts</text>
+<rect x="446" y="680" width="104" height="72" rx="4" fill="#ffffff" stroke="#1a2e4a" stroke-width="0.8"/>
+<text x="454" y="694" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#1a2e4a">PAUSE LOCKOUT</text>
+<text x="454" y="707" font-family="Arial, sans-serif" font-size="6.5" fill="#475569">Governance txs always</text>
+<text x="454" y="719" font-family="Arial, sans-serif" font-size="6.5" fill="#475569">pass through pause gate</text>
+<rect x="555" y="680" width="115" height="72" rx="4" fill="#ffffff" stroke="#1a2e4a" stroke-width="0.8"/>
+<text x="563" y="694" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#1a2e4a">KEY COMPROMISE</text>
+<text x="563" y="707" font-family="Arial, sans-serif" font-size="6.5" fill="#475569">M-of-N: 2 stolen keys = loss</text>
+<text x="563" y="719" font-family="Arial, sans-serif" font-size="6.5" fill="#475569">Op fix: hardware wallets</text>
+
+<!-- FOOTER -->
+<line x1="0" y1="762" x2="680" y2="762" stroke="#e2e8f0" stroke-width="0.5"/>
+<rect x="0" y="762" width="680" height="28" fill="#f8fafc"/>
+<text x="340" y="780" font-family="Arial, sans-serif" font-size="8" fill="#64748b" text-anchor="middle">Solidity · Hardhat · Ethers.js · Alchemy · Ethereum Sepolia · Prometheus · Discord Webhook · GitHub Actions</text>
+<text x="664" y="780" font-family="Arial, sans-serif" font-size="8" fill="#94a3b8" text-anchor="end">apu-saha-990 · Project 01</text>
+</svg>
