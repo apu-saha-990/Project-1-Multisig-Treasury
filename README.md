@@ -87,7 +87,7 @@ The lesson: test what happens when things go wrong, not just when they go right.
 
 ## How I Built This
 
-I came from a factory background. No degree in this field. No bootcamp.
+I came from a factory background.
 
 I use AI (Claude) throughout development — as a learning tool, code reviewer, and debugging partner. Every terminal error went back to Claude. Every concept I didn't understand, I worked through until I did.
 
